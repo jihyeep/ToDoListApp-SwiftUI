@@ -10,6 +10,12 @@ import SwiftUI
 struct ContentView: View {
     @State var tasks: [Task]
     
+    var sortedTasks: [Task] {
+        tasks.sorted(by: { (a, b) -> Bool in
+            return a.priority > b.priority
+        })
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -22,8 +28,21 @@ struct ContentView: View {
                         })
                         Text("\(tasks[index].description)")
                     }
+                    HStack {
+                        Picker("", selection: $tasks[index].priority) {
+                            ForEach(Priority.allCases, id: \.self) { priority in
+                                Text(priority.toString.capitalized)
+                            }
+                        }
+                    }
                 }
             }
+//            .onAppear(perform: {
+//                tasks = {
+//                    tasks.sorted { (a, b) -> Bool in
+//                    return a.priority < b.priority }
+//                }()
+//            })
             .navigationTitle("To do list")
         }
     }
