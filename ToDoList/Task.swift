@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Foundation
-
 enum Priority: Comparable {
     case high
     case medium

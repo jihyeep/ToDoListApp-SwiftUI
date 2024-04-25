@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var tasks: [Task]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                ForEach(tasks.indices, id: \.self) { index in
+                    HStack {
+                        Button (action: {
+                            tasks[index].completed.toggle()
+                        }, label: {
+                            Image(systemName: tasks[index].completed ? "checkmark.circle.fill" : "circle")
+                        })
+                        Text("\(tasks[index].description)")
+                    }
+                }
+            }
+            .navigationTitle("To do list")
         }
-        .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(tasks: Task.tasks)
 }
