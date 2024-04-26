@@ -23,27 +23,21 @@ struct ContentView: View {
         NavigationStack {
             List {
                 ForEach(taskStore.tasks.indices, id: \.self) { index in
-                    HStack {
-                        Button (action: {
-                            taskStore.tasks[index].completed.toggle()
-                        }, label: {
-                            Image(systemName: taskStore.tasks[index].completed ? "checkmark.circle.fill" : "circle")
-                        })
-                        Text("\(taskStore.tasks[index].description)")
-                        Picker("", selection: $taskStore.tasks[index].priority) {
-                            ForEach(Priority.allCases, id: \.self) { priority in
-                                Text(priority.toString.capitalized).tag(index)
+                        HStack {
+                            Button (action: {
+                                taskStore.tasks[index].completed.toggle()
+                            }, label: {
+                                Image(systemName: taskStore.tasks[index].completed ? "checkmark.circle.fill" : "circle")
+                            })
+                            Text("\(taskStore.tasks[index].description)")
+                            Picker("", selection: $taskStore.tasks[index].priority) {
+                                ForEach(Priority.allCases, id: \.self) { priority in
+                                    Text(priority.toString.capitalized).tag(index)
+                                }
                             }
+                            .pickerStyle(.menu) // 버튼과 겹치는 문제 해결
                         }
                     }
-//                    HStack {
-//                        Picker("", selection: $tasks[index].priority) {
-//                            ForEach(Priority.allCases, id: \.self) { priority in
-//                                Text(priority.toString.capitalized).tag(index)
-//                            }
-//                        }
-//                    }
-                }
                 .onMove(perform: { indices, newOffset in
                     taskStore.tasks.move(fromOffsets: indices, toOffset: newOffset)
                 })

@@ -67,7 +67,8 @@ class TaskStore: ObservableObject {
     @Published var tasks: [Task] = []
     
     init(tasks: [Task]) {
-        self.tasks = tasks
+//        self.tasks = tasks
+        self.tasks = tasks.sorted(by: { $0.priority.toNum > $1.priority.toNum })
     }
     
     func addTask(_ text: String, _ selectedPriority: Priority) {
