@@ -7,24 +7,6 @@
 
 import SwiftUI
 
-//struct NewTask: View {
-//    @State var text: String = ""
-//    var texts: String = "Task: "
-//    var textFields: String = "Enter about Task"
-//    
-//    var body: some View {
-//        HStack {
-//            Text(texts)
-//                .padding()
-//                .font(.largeTitle)
-//                .bold()
-//            TextField(textFields, text: $text)
-//                .font(.title)
-//                .textFieldStyle(.plain)
-//        }
-//    }
-//}
-
 struct AddTaskView: View {
     @Binding var isSheetShowing: Bool
     @State var text: String = ""
@@ -59,7 +41,6 @@ struct AddTaskView: View {
                 .pickerStyle(.segmented)
                 .frame(width: 200)
                 .padding()
-//                .background(.blue)
                 .cornerRadius(15)
                 .padding(.trailing)
             }
@@ -82,8 +63,6 @@ struct AddTaskView: View {
             .disabled(text.isEmpty)
         }
     }
-    
-
 }
 
 

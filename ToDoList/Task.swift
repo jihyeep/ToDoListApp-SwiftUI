@@ -57,7 +57,7 @@ extension Task {
         Task(completed: false, description: "Shower", priority: .medium),
         Task(completed: false, description: "Code", priority: .high),
         Task(completed: false, description: "Eat", priority: .high ),
-        Task(completed: false, description: "Sleep", priority: .high),
+        Task(completed: false, description: "Sleep", priority: .low),
         Task(completed: false, description: "Get groceries", priority: .high)
     ]
     static var task = tasks[0]
@@ -67,12 +67,22 @@ class TaskStore: ObservableObject {
     @Published var tasks: [Task] = []
     
     init(tasks: [Task]) {
-//        self.tasks = tasks
-        self.tasks = tasks.sorted(by: { $0.priority.toNum > $1.priority.toNum })
+        self.tasks = tasks
+        sortTasksByPriority()
+        print(tasks[0])
     }
     
     func addTask(_ text: String, _ selectedPriority: Priority) {
         let task: Task = Task(completed: false, description: text, priority: selectedPriority)
-        tasks.insert(task, at: 0)
+        tasks.append(task)
+        sortTasksByPriority()
+    }
+    
+    // priority case로 정렬
+    func sortTasksByPriority() {
+//        tasks.sort { $0.priority < $1.priority }
+        tasks.sort(by: { (a, b) -> Bool in
+            return a.priority < b.priority
+        })
     }
 }

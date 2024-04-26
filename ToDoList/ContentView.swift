@@ -9,15 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var taskStore = TaskStore(tasks: Task.tasks)
-    // 완료버튼과 priority 분리
-//    @State var selectedPriority: Priority?
     @State var isSheetShowing: Bool = false
-    
-    var sortedTasks: [Task] {
-        taskStore.tasks.sorted(by: { (a, b) -> Bool in
-            return a.priority > b.priority
-        })
-    }
     
     var body: some View {
         NavigationStack {
@@ -36,6 +28,13 @@ struct ContentView: View {
                                 }
                             }
                             .pickerStyle(.menu) // 버튼과 겹치는 문제 해결
+                            // priority로 정렬
+                            .onChange(of: taskStore.tasks[index].priority) { oldValue, newValue in
+                                if let index = taskStore.tasks.firstIndex(where: {$0.id == taskStore.tasks[index].id}) {
+                                    taskStore.tasks[index].priority = newValue
+                                    taskStore.sortTasksByPriority()
+                                }
+                            }
                         }
                     }
                 .onMove(perform: { indices, newOffset in
@@ -45,12 +44,6 @@ struct ContentView: View {
                     taskStore.tasks.remove(atOffsets: indexSet)
                 })
             }
-//            .onAppear(perform: {
-//                tasks = {
-//                    tasks.sorted { (a, b) -> Bool in
-//                    return a.priority < b.priority }
-//                }()
-//            })
             .navigationTitle("To do list")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
