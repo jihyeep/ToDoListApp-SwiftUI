@@ -88,9 +88,9 @@ class TaskStore: ObservableObject {
             tasks.sort(by: { (a, b) -> Bool in
                 return a.priority < b.priority
             })
-        } else {
+        } /*else {
             tasks.sort { $0.id < $1.id } // 기본 정렬 방식(id로 정렬)
-        }
+        }*/
     }
     
     // priority 정렬 토글 함수
