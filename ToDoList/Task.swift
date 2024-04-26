@@ -63,10 +63,13 @@ extension Task {
     static var task = tasks[0]
 }
 
+// TODO: 저장소 추가
 class TaskStore: ObservableObject {
     @Published var tasks: [Task] = []
+    @Published var isSortByPrirority: Bool = false
     
     init(tasks: [Task]) {
+        // 기존 데이터 등록
         self.tasks = tasks
         sortTasksByPriority()
         print(tasks[0])
@@ -78,11 +81,21 @@ class TaskStore: ObservableObject {
         sortTasksByPriority()
     }
     
-    // priority case로 정렬
+    // priority 정렬 함수: case로 정렬
     func sortTasksByPriority() {
 //        tasks.sort { $0.priority < $1.priority }
-        tasks.sort(by: { (a, b) -> Bool in
-            return a.priority < b.priority
-        })
+        if isSortByPrirority {
+            tasks.sort(by: { (a, b) -> Bool in
+                return a.priority < b.priority
+            })
+        } else {
+            tasks.sort { $0.id < $1.id } // 기본 정렬 방식(id로 정렬)
+        }
+    }
+    
+    // priority 정렬 토글 함수
+    func toggleSortByPriority() {
+        isSortByPrirority.toggle()
+        sortTasksByPriority()
     }
 }
