@@ -62,3 +62,16 @@ extension Task {
     ]
     static var task = tasks[0]
 }
+
+class TaskStore: ObservableObject {
+    @Published var tasks: [Task] = []
+    
+    init(tasks: [Task]) {
+        self.tasks = tasks
+    }
+    
+    func addTask(_ text: String, _ selectedPriority: Priority) {
+        let task: Task = Task(completed: false, description: text, priority: selectedPriority)
+        tasks.insert(task, at: 0)
+    }
+}

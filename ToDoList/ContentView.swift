@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var tasks: [Task]
+    @StateObject var taskStore = TaskStore(tasks: Task.tasks)
     // 완료버튼과 priority 분리
 //    @State var selectedPriority: Priority?
     @State var isSheetShowing: Bool = false
     
     var sortedTasks: [Task] {
-        tasks.sorted(by: { (a, b) -> Bool in
+        taskStore.tasks.sorted(by: { (a, b) -> Bool in
             return a.priority > b.priority
         })
     }
@@ -22,15 +22,15 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(tasks.indices, id: \.self) { index in
+                ForEach(taskStore.tasks.indices, id: \.self) { index in
                     HStack {
                         Button (action: {
-                            tasks[index].completed.toggle()
+                            taskStore.tasks[index].completed.toggle()
                         }, label: {
-                            Image(systemName: tasks[index].completed ? "checkmark.circle.fill" : "circle")
+                            Image(systemName: taskStore.tasks[index].completed ? "checkmark.circle.fill" : "circle")
                         })
-                        Text("\(tasks[index].description)")
-                        Picker("", selection: $tasks[index].priority) {
+                        Text("\(taskStore.tasks[index].description)")
+                        Picker("", selection: $taskStore.tasks[index].priority) {
                             ForEach(Priority.allCases, id: \.self) { priority in
                                 Text(priority.toString.capitalized).tag(index)
                             }
@@ -45,10 +45,10 @@ struct ContentView: View {
 //                    }
                 }
                 .onMove(perform: { indices, newOffset in
-                    tasks.move(fromOffsets: indices, toOffset: newOffset)
+                    taskStore.tasks.move(fromOffsets: indices, toOffset: newOffset)
                 })
                 .onDelete(perform: { indexSet in
-                    tasks.remove(atOffsets: indexSet)
+                    taskStore.tasks.remove(atOffsets: indexSet)
                 })
             }
 //            .onAppear(perform: {
@@ -82,9 +82,10 @@ struct ContentView: View {
                 AddTaskView(isSheetShowing: $isSheetShowing)
             })
         }
+        .environmentObject(taskStore)
     }
 }
 
 #Preview {
-    ContentView(tasks: Task.tasks)
+    ContentView()
 }

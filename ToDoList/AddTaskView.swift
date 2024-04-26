@@ -28,7 +28,8 @@ import SwiftUI
 struct AddTaskView: View {
     @Binding var isSheetShowing: Bool
     @State var text: String = ""
-    @State var selectedPriority = ""
+    @State var selectedPriority: Priority = .medium
+    @EnvironmentObject var taskStore: TaskStore
     
     var body: some View {
         VStack {
@@ -56,15 +57,18 @@ struct AddTaskView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .frame(width: 200)
                 .padding()
-                .background(.blue)
+//                .background(.blue)
                 .cornerRadius(15)
                 .padding(.trailing)
             }
             Spacer()
             Button {
                 // TODO: 할일 추가
-                
+                taskStore.addTask(text, selectedPriority)
+                print(taskStore.tasks)
+                isSheetShowing = false
             } label: {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
@@ -75,9 +79,14 @@ struct AddTaskView: View {
                         .bold()
                 }
             }
+            .disabled(text.isEmpty)
         }
     }
+    
+
 }
+
+
 #Preview {
     AddTaskView(isSheetShowing: .constant(true))
 }
